@@ -3,7 +3,7 @@ import * as SessionInformation from "../reducers/session.reducer";
 
 export const sessionFeatureKey = 'session';
 
-export interface AppState {
+export interface State {
   session: SessionInformation.State;
 }
 
@@ -46,4 +46,3 @@ export const selectShowSessionPopup = createSelector(
   selectRefreshSessionStatus,
   (extendSessionStatus, refreshSessionStatus) => extendSessionStatus && !refreshSessionStatus
 );
-
