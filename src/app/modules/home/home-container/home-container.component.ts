@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Store} from "@ngrx/store";
+import * as fromSession from "../../session-management/store/reducers/session.reducer";
+import {LogOut} from "../../session-management/store/actions/session.actions";
 
 @Component({
   selector: 'home-container',
@@ -7,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeContainerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private store: Store<fromSession.State>) { }
 
   ngOnInit(): void {
   }
 
+  logout() {
+    this.store.dispatch(LogOut())
+  }
 }

@@ -1,25 +1,30 @@
 ﻿import {Injectable} from '@angular/core';
 import {Actions, concatLatestFrom, createEffect, ofType} from '@ngrx/effects';
-import {filter, interval, of} from 'rxjs';
+import {filter, interval, of, switchMap, tap} from 'rxjs';
 import {map, mergeMap, catchError} from 'rxjs/operators';
 import * as moment from 'moment'
 import * as SessionActions from '../actions/session.actions'
-import {TokenInformation} from "../models/tokenInformation";
 import * as fromSession from '../reducers/session.reducer';
 import * as SessionSelectors from '../selectors/session.selectors'
 import {Store} from "@ngrx/store";
+import {Router} from "@angular/router";
+import {AuthService} from "../../services";
 
 @Injectable()
 export class SessionEffects {
   constructor(
     private actions$: Actions,
-    private store: Store<fromSession.State>
+    private store: Store<fromSession.State>,
+    private authService: AuthService,
+    private router: Router
   ) {
   }
 
   private readonly timerIntervalCheckInMilliseconds: number = 1000
   private readonly extendSessionRangeInMinutes: number = 5
   private readonly refreshBufferInMinutes: number = 1
+  private readonly rootPath: string = '/'
+  private readonly landingPathPath: string = '/home'
 
   sessionTimerForExtendSession$ = createEffect(() =>
     interval(this.timerIntervalCheckInMilliseconds).pipe(
@@ -47,39 +52,50 @@ export class SessionEffects {
 
   logOn$ = createEffect(() => this.actions$.pipe(
       ofType(SessionActions.Login),
-      map(payload => {
-
-        //This would be a service call but hardcoding for example.
-        let token: TokenInformation = {
-          value: "JWT Token Value",
-          expiryDateTime: moment().add(30, <moment.unitOfTime.DurationConstructor>"minute").toDate(),
-        }
-
-        return SessionActions.LoginSuccess({token: token});
-        //Failure for service
-        //return SessionActions.LoginFailed()
-      })
+      switchMap((payload) =>
+        this.authService.logIn({username: payload.username, password: payload.password}).pipe(
+          map(res => SessionActions.LoginSuccess({token: {value: res.token, expiryDateTime: res.expiryDate}})),
+          catchError(() => of(SessionActions.LoginFailed))
+        )
+      )
     )
   );
+
+  loginAfterFail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SessionActions.LogOut),
+      concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
+      switchMap(([action, token]) =>
+        this.authService.logOut({token: <string>token}).pipe(
+          map(res => this.router.navigate([this.rootPath])),
+          catchError(() => this.router.navigate([this.rootPath]))
+        )
+      )
+    ), {dispatch: false})
+
+  loginAfterSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SessionActions.LoginSuccess),
+      tap(() => this.router.navigate([this.landingPathPath]))
+    ), {dispatch: false})
 
   refreshToken$ = createEffect(() => this.actions$.pipe(
       ofType(SessionActions.RefreshToken),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectLastRefreshTokenTime)),
-      mergeMap(([action, lastRefreshTokenTime]) => of({action, lastRefreshTokenTime, now: moment()})),
-      filter(({action, lastRefreshTokenTime, now}) =>
+      concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
+      mergeMap(([[action, lastRefreshTokenTime], token]) => of({action, lastRefreshTokenTime, token, now: moment()})),
+      filter(({action, lastRefreshTokenTime, token, now}) =>
         lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInMinutes, <moment.unitOfTime.DurationConstructor>"minute")
       ),
-      map(({action, lastRefreshTokenTime, now}) => {
-        //This would be a service call but hardcoding for example.
-        let token: TokenInformation = {
-          value: "Refreshed JWT Token Value",
-          expiryDateTime: now.add(30, <moment.unitOfTime.DurationConstructor>"minute").toDate(),
-        }
-
-        return SessionActions.RefreshTokenSuccess({token: token, latestRefreshTokenDateTime: now.toDate()})
-        //Failure for service
-        //return SessionActions.RefreshTokenFailed({latestRefreshTokenDateTime: now.toDate()})
-      })
+      switchMap(({action, lastRefreshTokenTime, token, now}) =>
+        this.authService.refreshToken({token: <string>token}).pipe(
+          map(res => SessionActions.RefreshTokenSuccess({
+            token: {value: res.token, expiryDateTime: res.expiryDate},
+            latestRefreshTokenDateTime: now.toDate()
+          })),
+          catchError(() => of(SessionActions.RefreshTokenFailed()))
+        )
+      )
     )
   );
 }
