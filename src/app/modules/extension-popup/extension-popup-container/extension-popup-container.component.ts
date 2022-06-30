@@ -4,8 +4,6 @@ import * as fromSession from "../../session-management/store/reducers/session.re
 import {LogOut, RefreshToken} from "../../session-management/store/actions/session.actions";
 import {selectTokenExpiryDateTime} from "../../session-management/store/selectors/session.selectors";
 import {Observable} from "rxjs";
-import * as moment from "moment";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-extension-popup-container',
@@ -13,12 +11,10 @@ import {map} from "rxjs/operators";
   styleUrls: ['./extension-popup-container.component.scss']
 })
 export class ExtensionPopupContainerComponent implements OnInit {
-  expiryDateTime$!: Observable<Date>;
+  expiryDateTime$!: Observable<Date | undefined>;
 
   constructor(private store: Store<fromSession.State>) {
-    this.expiryDateTime$ = this.store.select(selectTokenExpiryDateTime).pipe(
-      map(c => c != undefined ? new Date(c) : moment().add(5, "minute").toDate())
-    )
+    this.expiryDateTime$ = this.store.select(selectTokenExpiryDateTime)
   }
 
   ngOnInit(): void {
