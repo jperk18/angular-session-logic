@@ -7,6 +7,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
   @Output() logOutClicked: EventEmitter<void> = new EventEmitter<void>()
+  @Output() exploreClicked: EventEmitter<void> = new EventEmitter<void>()
 
   constructor() {
   }
@@ -16,5 +17,9 @@ export class HomePageComponent implements OnInit {
 
   logout() {
     this.logOutClicked.emit();
+  }
+
+  explore() {
+    this.exploreClicked.emit();
   }
 }

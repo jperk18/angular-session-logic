@@ -83,9 +83,13 @@ export class SessionEffects {
       ofType(SessionActions.RefreshToken),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectLastRefreshTokenTime)),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
-      mergeMap(([[action, lastRefreshTokenTime], token]) => of({action, lastRefreshTokenTime, token, now: moment()})),
+      concatLatestFrom(action => this.store.select(SessionSelectors.selectIsUserLoggedIn)),
+      filter(([[[action, lastRefreshTokenTime], token], isUserLoggedIn]) => token != undefined && isUserLoggedIn),
+      mergeMap(([[[action, lastRefreshTokenTime], token], isUserLoggedIn]) =>
+        of({action, lastRefreshTokenTime, token, now: moment()})
+      ),
       filter(({action, lastRefreshTokenTime, token, now}) =>
-        token != undefined && (action.forceSessionExtension || (lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInSeconds, <moment.unitOfTime.DurationConstructor>"second")))
+        action.forceSessionExtension || (lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInSeconds, <moment.unitOfTime.DurationConstructor>"second"))
       ),
       switchMap(({action, lastRefreshTokenTime, token, now}) =>
         this.authService.refreshToken({token: <string>token}).pipe(

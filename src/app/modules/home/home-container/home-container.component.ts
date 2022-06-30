@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromSession from "../../session-management/store/reducers/session.reducer";
-import {LogOut} from "../../session-management/store/actions/session.actions";
+import {LogOut, RefreshToken} from "../../session-management/store/actions/session.actions";
 import {selectShowSessionPopup} from "../../session-management/store/selectors/session.selectors";
 import {Observable} from "rxjs";
 
@@ -22,5 +22,9 @@ export class HomeContainerComponent implements OnInit {
 
   logout() {
     this.store.dispatch(LogOut())
+  }
+
+  explore() {
+    this.store.dispatch(RefreshToken({forceSessionExtension: false}))
   }
 }
