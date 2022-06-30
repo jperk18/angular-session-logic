@@ -1,0 +1,6 @@
+<span *ngIf="(timeLeft$ | async) as t" class="countdown">
+  <span *ngIf="displayFrequency == 'day'">{{t.daysToDday <= 0 ? '00' : t.daysToDday < 10 ? "0" + t.daysToDday : t.daysToDday}}:</span>
+  <span *ngIf="displayFrequency == 'hour' || displayFrequency == 'day'">{{t.hoursToDday <= 0 ? '00' : t.hoursToDday < 10 ? "0" + t.hoursToDday : t.hoursToDday}}:</span>
+  <span *ngIf="displayFrequency == 'hour' || displayFrequency == 'day' || displayFrequency == 'minute'">{{t.minutesToDday <= 0 ? '00' : t.minutesToDday < 10 ? "0" + t.minutesToDday : t.minutesToDday}}:</span>
+  <span *ngIf="displayFrequency == 'hour' || displayFrequency == 'day' || displayFrequency == 'minute' || displayFrequency == 'second'">{{t.secondsToDday <= 0 ? '00' : t.secondsToDday < 10 ? "0" + t.secondsToDday : t.secondsToDday}}</span>
+</span>
