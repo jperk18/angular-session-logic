@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromSession from "../../session-management/store/reducers/session.reducer";
-import {LogOut, RefreshToken} from "../../session-management/store/actions/session.actions";
+import {LogOut, RefreshSession} from "../../session-management/store/actions/session.actions";
 import {selectTokenExpiryDateTime} from "../../session-management/store/selectors/session.selectors";
 import {Observable} from "rxjs";
 
@@ -25,6 +25,6 @@ export class ExtensionPopupContainerComponent implements OnInit {
   }
 
   extendSession() {
-    this.store.dispatch(RefreshToken({forceSessionExtension: true}))
+    this.store.dispatch(RefreshSession({forceSessionExtension: true}))
   }
 }

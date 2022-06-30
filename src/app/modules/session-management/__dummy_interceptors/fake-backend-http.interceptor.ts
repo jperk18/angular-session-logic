@@ -12,7 +12,7 @@ import * as moment from "moment";
 
 @Injectable()
 export class FakeBackendHttpInterceptor implements HttpInterceptor {
-
+  private sessionDurationInMinutes: number = 30
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -27,12 +27,12 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     const { url, method } = req
 
     if (url.startsWith(this.authService.logInUrl)) {
-      let rep: LoginApiResponse = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(30, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
+      let rep: LoginApiResponse = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 
     if (url.startsWith(this.authService.refreshTokenUrl)) {
-      let rep: RefreshTokenApiResponse = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(30, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
+      let rep: RefreshTokenApiResponse = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 

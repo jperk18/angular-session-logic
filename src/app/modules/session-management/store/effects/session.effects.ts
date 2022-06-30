@@ -79,8 +79,8 @@ export class SessionEffects {
       tap(() => this.router.navigate([this.landingPathPath]))
     ), {dispatch: false})
 
-  refreshToken$ = createEffect(() => this.actions$.pipe(
-      ofType(SessionActions.RefreshToken),
+  refreshSession$ = createEffect(() => this.actions$.pipe(
+      ofType(SessionActions.RefreshSession),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectLastRefreshTokenTime)),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectIsUserLoggedIn)),
@@ -91,11 +91,19 @@ export class SessionEffects {
       filter(({action, lastRefreshTokenTime, token, now}) =>
         action.forceSessionExtension || (lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInSeconds, <moment.unitOfTime.DurationConstructor>"second"))
       ),
-      switchMap(({action, lastRefreshTokenTime, token, now}) =>
-        this.authService.refreshToken({token: <string>token}).pipe(
+      map(({action, lastRefreshTokenTime, token, now}) =>
+        SessionActions.RefreshToken({token: <string>token, now: now.toDate()})
+      )
+    )
+  );
+
+  refreshToken$ = createEffect(() => this.actions$.pipe(
+      ofType(SessionActions.RefreshToken),
+      switchMap(action =>
+        this.authService.refreshToken({token: action.token}).pipe(
           map(res => SessionActions.RefreshTokenSuccess({
             token: {value: res.token, expiryDateTime: res.expiryDate},
-            latestRefreshTokenDateTime: now.toDate()
+            latestRefreshTokenDateTime: action.now
           })),
           catchError(() => of(SessionActions.RefreshTokenFailed()))
         )

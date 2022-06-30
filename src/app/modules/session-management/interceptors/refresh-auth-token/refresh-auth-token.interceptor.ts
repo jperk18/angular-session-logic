@@ -11,7 +11,7 @@ import {Store} from "@ngrx/store";
 import * as fromSession from "../../store/reducers/session.reducer";
 import {selectIsUserLoggedIn} from "../../store/selectors/session.selectors";
 import {mergeMap} from "rxjs/operators";
-import {RefreshToken} from "../../store/actions/session.actions";
+import {RefreshSession} from "../../store/actions/session.actions";
 
 @Injectable()
 export class RefreshAuthTokenInterceptor implements HttpInterceptor {
@@ -24,7 +24,7 @@ export class RefreshAuthTokenInterceptor implements HttpInterceptor {
       first(),
       mergeMap(isUserLoggedIn => {
         if (isUserLoggedIn && !this.authService.startsWithAuthServiceUrl(request.url))
-          this.store.dispatch(RefreshToken({ forceSessionExtension: false }));
+          this.store.dispatch(RefreshSession({ forceSessionExtension: false }));
         return next.handle(request);
       }),
     )

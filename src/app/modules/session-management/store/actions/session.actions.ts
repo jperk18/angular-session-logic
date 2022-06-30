@@ -2,14 +2,14 @@
 import {TokenInformation} from "../models/tokenInformation";
 
 export const Login = createAction('[SESSION] LOGIN', props<{username: string, password: string}>());
-export const LoginSuccess = createAction('[SESSION] LOGIN SUCCESS', props<{token: TokenInformation}>());
-export const LoginFailed = createAction('[SESSION] LOGIN FAILED');
-
-export const ExtendSession = createAction('[SESSION] EXTEND SESSION');
-
-export const RefreshToken = createAction('[SESSION] REFRESH TOKEN', props<{forceSessionExtension: boolean}>());
-export const RefreshTokenSuccess = createAction('[SESSION] REFRESH TOKEN SUCCESS', props<{token: TokenInformation, latestRefreshTokenDateTime: Date}>());
-export const RefreshTokenFailed = createAction('[SESSION] REFRESH TOKEN FAILED');
-
 export const LogOut = createAction('[SESSION] LOGOUT');
+export const RefreshSession = createAction('[SESSION] ATTEMPT REFRESH SESSION', props<{forceSessionExtension: boolean}>());
+
+//Internal actions that are called from effect and not outside store components
+export const RefreshToken = createAction('[SESSION] (INTERNAL) REFRESH TOKEN', props<{token: string, now: Date}>());
+export const RefreshTokenSuccess = createAction('[SESSION] (INTERNAL) REFRESH TOKEN SUCCESS', props<{token: TokenInformation, latestRefreshTokenDateTime: Date}>());
+export const RefreshTokenFailed = createAction('[SESSION] (INTERNAL) REFRESH TOKEN FAILED');
+export const ExtendSession = createAction('[SESSION] (INTERNAL) EXTEND SESSION');
+export const LoginSuccess = createAction('[SESSION] (INTERNAL) LOGIN SUCCESS', props<{token: TokenInformation}>());
+export const LoginFailed = createAction('[SESSION] (INTERNAL) LOGIN FAILED');
 
