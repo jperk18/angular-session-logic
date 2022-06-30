@@ -25,6 +25,6 @@ export class ExtensionPopupContainerComponent implements OnInit {
   }
 
   extendSession() {
-    this.store.dispatch(RefreshToken())
+    this.store.dispatch(RefreshToken({forceSessionExtension: true}))
   }
 }

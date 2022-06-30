@@ -4,7 +4,7 @@
       <span>Extend session</span>
     </div>
     <div class="popup-content">
-      <span>The current session is expirying in </span><timer-counter [dateTime]="((expiryDateTime$ | async)!)"></timer-counter><span>. Extend your session to stay logged in, or logout.</span>
+      <span>The current session is expirying in </span><timer-counter [dateTime]="((expiryDateTime$ | async)!)"></timer-counter><span>. Extend your session to stay logged in.</span>
     </div>
     <div class="popup-actions">
       <button (click)="extendSession()">Extend</button>

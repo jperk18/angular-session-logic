@@ -85,7 +85,7 @@ export class SessionEffects {
       concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
       mergeMap(([[action, lastRefreshTokenTime], token]) => of({action, lastRefreshTokenTime, token, now: moment()})),
       filter(({action, lastRefreshTokenTime, token, now}) =>
-        lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInSeconds, <moment.unitOfTime.DurationConstructor>"second")
+        token != undefined && (action.forceSessionExtension || (lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInSeconds, <moment.unitOfTime.DurationConstructor>"second")))
       ),
       switchMap(({action, lastRefreshTokenTime, token, now}) =>
         this.authService.refreshToken({token: <string>token}).pipe(

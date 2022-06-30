@@ -22,7 +22,7 @@ export const selectTokenValue = createSelector(
 
 export const selectTokenExpiryDateTime = createSelector(
   selectSessionFeature,
-  (state: SessionInformation.State) => state.token?.expiryDateTime ? undefined : <Date>state.token?.expiryDateTime
+  (state: SessionInformation.State) => state.token?.expiryDateTime == undefined ? undefined : new Date(state.token.expiryDateTime)
 );
 
 export const selectExtendSessionStatus = createSelector(
@@ -37,7 +37,7 @@ export const selectRefreshSessionStatus = createSelector(
 
 export const selectLastRefreshTokenTime = createSelector(
   selectSessionFeature,
-  (state: SessionInformation.State) => state.session?.latestRefreshTokenDateTime ? undefined : <Date>state.session.latestRefreshTokenDateTime
+  (state: SessionInformation.State) => state.session?.latestRefreshTokenDateTime == undefined ? undefined : new Date(state.session.latestRefreshTokenDateTime)
 );
 
 export const selectShowSessionPopup = createSelector(

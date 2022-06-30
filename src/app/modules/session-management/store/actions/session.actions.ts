@@ -7,7 +7,7 @@ export const LoginFailed = createAction('[SESSION] LOGIN FAILED');
 
 export const ExtendSession = createAction('[SESSION] EXTEND SESSION');
 
-export const RefreshToken = createAction('[SESSION] REFRESH TOKEN');
+export const RefreshToken = createAction('[SESSION] REFRESH TOKEN', props<{forceSessionExtension: boolean}>());
 export const RefreshTokenSuccess = createAction('[SESSION] REFRESH TOKEN SUCCESS', props<{token: TokenInformation, latestRefreshTokenDateTime: Date}>());
 export const RefreshTokenFailed = createAction('[SESSION] REFRESH TOKEN FAILED');
 

@@ -5,15 +5,15 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import {combineLatest, first, forkJoin, Observable, pipe} from 'rxjs';
+import {combineLatest, first, Observable} from 'rxjs';
 import {AuthService} from "../../services";
-import {select, Store} from "@ngrx/store";
+import {Store} from "@ngrx/store";
 import * as fromSession from "../../store/reducers/session.reducer";
 import {selectIsUserLoggedIn, selectTokenValue} from "../../store/selectors/session.selectors";
 import {mergeMap} from "rxjs/operators";
 
 @Injectable()
-export class AuthTokenInterceptor implements HttpInterceptor {
+export class AppendAuthTokenInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthService, private store: Store<fromSession.State>) {
   }
