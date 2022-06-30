@@ -1,5 +1,4 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import * as moment from "moment";
 
 @Component({
   selector: 'home-page',
@@ -8,10 +7,8 @@ import * as moment from "moment";
 })
 export class HomePageComponent implements OnInit {
   @Output() logOutClicked: EventEmitter<void> = new EventEmitter<void>()
-  time: Date
 
   constructor() {
-    this.time = moment().add(5, "minute").toDate()
   }
 
   ngOnInit(): void {

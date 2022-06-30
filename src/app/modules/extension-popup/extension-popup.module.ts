@@ -1,16 +1,19 @@
 import {NgModule} from '@angular/core';
-import {TimerComponent} from './components/timer/timer.component'
+import {TimerCounterComponent} from './components/timer/timer-counter.component'
 import {CommonModule} from "@angular/common";
+import { ExtensionPopupContainerComponent } from './extension-popup-container/extension-popup-container.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: [
-    TimerComponent
+    TimerCounterComponent,
+    ExtensionPopupContainerComponent
   ],
   declarations: [
-    TimerComponent
+    TimerCounterComponent,
+    ExtensionPopupContainerComponent
   ]
 })
 export class ExtensionPopupModule {

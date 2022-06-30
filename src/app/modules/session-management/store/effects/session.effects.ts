@@ -22,7 +22,7 @@ export class SessionEffects {
 
   private readonly timerIntervalCheckInMilliseconds: number = 1000
   private readonly extendSessionRangeInMinutes: number = 5
-  private readonly refreshBufferInMinutes: number = 1
+  private readonly refreshBufferInSeconds: number = 15
   private readonly rootPath: string = '/'
   private readonly landingPathPath: string = '/home'
 
@@ -85,7 +85,7 @@ export class SessionEffects {
       concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
       mergeMap(([[action, lastRefreshTokenTime], token]) => of({action, lastRefreshTokenTime, token, now: moment()})),
       filter(({action, lastRefreshTokenTime, token, now}) =>
-        lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInMinutes, <moment.unitOfTime.DurationConstructor>"minute")
+        lastRefreshTokenTime == undefined || now > moment(lastRefreshTokenTime).add(this.refreshBufferInSeconds, <moment.unitOfTime.DurationConstructor>"second")
       ),
       switchMap(({action, lastRefreshTokenTime, token, now}) =>
         this.authService.refreshToken({token: <string>token}).pipe(

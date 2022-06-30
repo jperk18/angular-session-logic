@@ -4,16 +4,16 @@ import {map} from "rxjs/operators";
 
 @Component({
   selector: 'timer-counter',
-  templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.scss']
+  templateUrl: './timer-counter.component.html',
+  styleUrls: ['./timer-counter.component.scss']
 })
-export class TimerComponent implements OnInit {
+export class TimerCounterComponent implements OnInit {
   @Input() dateTime!: Date;
   @Input() displayFrequency: "day" | "hour" | "minute" | "second" = "minute"
   timeLeft$: Observable<timeComponents>
 
   constructor() {
-    this.timeLeft$ = interval(10).pipe(
+    this.timeLeft$ = interval(50).pipe(
       map(x => this.calcDateDiff(this.dateTime)),
       takeWhile(x => this.dateTime > new Date()),
       shareReplay(1)

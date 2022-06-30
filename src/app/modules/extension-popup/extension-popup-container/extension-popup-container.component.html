@@ -1,0 +1,14 @@
+<div id="overlay">
+  <div class="popup">
+    <div class="popup-header">
+      <span>Extend session</span>
+    </div>
+    <div class="popup-content">
+      <span>The current session is expirying in </span><timer-counter [dateTime]="((expiryDateTime$ | async)!)"></timer-counter><span>. Extend your session to stay logged in, or logout.</span>
+    </div>
+    <div class="popup-actions">
+      <button (click)="extendSession()">Extend</button>
+      <button (click)="logout()" >Log Off</button>
+    </div>
+  </div>
+</div>
