@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import * as fromSession from "../../session-management/store/reducers/session.reducer";
-import {LogOut, RefreshSession} from "../../session-management/store/actions/session.actions";
-import {selectShowSessionPopup} from "../../session-management/store/selectors/session.selectors";
+import * as SessionManagement from "../../session-management";
 import {Observable} from "rxjs";
 
 @Component({
@@ -13,18 +11,18 @@ import {Observable} from "rxjs";
 export class HomeContainerComponent implements OnInit {
   showExtendPopup$!: Observable<boolean>
 
-  constructor(private store: Store<fromSession.State>) {
-    this.showExtendPopup$ = this.store.select(selectShowSessionPopup)
+  constructor(private store: Store<SessionManagement.State>) {
+    this.showExtendPopup$ = this.store.select(SessionManagement.Selectors.selectShowSessionPopup)
   }
 
   ngOnInit(): void {
   }
 
   logout() {
-    this.store.dispatch(LogOut())
+    this.store.dispatch(SessionManagement.Actions.LogOut())
   }
 
   explore() {
-    this.store.dispatch(RefreshSession({forceSessionExtension: false}))
+    this.store.dispatch(SessionManagement.Actions.RefreshSession({forceSessionExtension: false}))
   }
 }

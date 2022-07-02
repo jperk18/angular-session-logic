@@ -1,29 +1,51 @@
-import {NgModule} from '@angular/core';
-import {StoreModule} from '@ngrx/store';
+import {ModuleWithProviders, NgModule, Provider, Type} from '@angular/core';
+import {MetaReducer, StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {sessionFeatureKey} from "./store/selectors/session.selectors";
-import {sessionReducer, hydrationMetaReducer} from "./store/reducers/session.reducer";
+import {hydrationMetaReducer, sessionReducer} from "./store/reducers/session.reducer";
 import {SessionEffects} from "./store/effects/session.effects";
-import {MetaReducer} from "@ngrx/store";
-import {AuthService} from "./services";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AppendAuthTokenInterceptor, RefreshAuthTokenInterceptor} from "./interceptors";
-import {FakeBackendHttpInterceptor} from "./__dummy_interceptors/fake-backend-http.interceptor";
+import {SessionManagementConfigService, SessionAuthenticationService, AuthenticationService} from "./services";
+import {SessionManagementConfig} from "./services/sessionManagementConfigService/models/session-management.config";
 
-export const metaReducers: MetaReducer[] = [hydrationMetaReducer];
+const metaReducers: MetaReducer[] = [hydrationMetaReducer];
 
 @NgModule({
   imports: [
     HttpClientModule,
     StoreModule.forFeature(sessionFeatureKey, sessionReducer, {metaReducers}),
     EffectsModule.forFeature([SessionEffects])
-  ],
-  providers: [
-    AuthService,
-    {provide: HTTP_INTERCEPTORS, useClass: AppendAuthTokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: RefreshAuthTokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: FakeBackendHttpInterceptor, multi: true}
   ]
 })
+export class SessionHandlerModule {
+}
+
+
+@NgModule()
 export class SessionManagementModule {
+  static forRoot(config: SessionManagementConfig, authenticationService: Type<AuthenticationService>, includeAppendAuthBearerTokenInterceptor: boolean = true, includeRefreshAuthTokenInterceptor: boolean = true): ModuleWithProviders<SessionHandlerModule> {
+
+    let sessionProviders: Provider = [
+      {
+        provide: SessionManagementConfigService,
+        useValue: config
+      },
+      {
+        provide: SessionAuthenticationService,
+        useClass: authenticationService
+      }
+    ]
+
+    if(includeAppendAuthBearerTokenInterceptor)
+      sessionProviders.push({provide: HTTP_INTERCEPTORS, useClass: AppendAuthTokenInterceptor, multi: true})
+
+    if(includeRefreshAuthTokenInterceptor)
+      sessionProviders.push({provide: HTTP_INTERCEPTORS, useClass: RefreshAuthTokenInterceptor, multi: true})
+
+    return {
+      ngModule: SessionHandlerModule,
+      providers: sessionProviders
+    };
+  }
 }

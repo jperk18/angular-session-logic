@@ -3,6 +3,8 @@ import {UserCredentials} from "../models";
 import {Store} from "@ngrx/store";
 import * as fromSession from "../../session-management/store/reducers/session.reducer";
 import {Login} from "../../session-management/store/actions/session.actions";
+import {LoginRequest} from "../../session-management/services/authentication/models";
+import {AppUserCredentials} from "../../../__dummy/fake-config-and-service";
 
 @Component({
   selector: 'login-container',
@@ -18,7 +20,8 @@ export class LoginContainerComponent implements OnInit, OnDestroy {
   }
 
   logInClicked(event: UserCredentials) {
-    this.store.dispatch(Login({username: <string>event.username, password: <string>event.password}))
+    let req: LoginRequest<AppUserCredentials> = { credentials: {username: <string>event.username, password: <string>event.password}}
+    this.store.dispatch(Login(req))
   }
 
   ngOnDestroy(): void {

@@ -3,17 +3,21 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor, HttpResponse, HTTP_INTERCEPTORS
+  HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import {delay, Observable, of} from 'rxjs';
-import {AuthService} from "../services";
-import {LoginApiResponse, LogoutApiResponse, RefreshTokenApiResponse} from "../services/auth/models";
+import {AuthServiceImp} from "./fake-config-and-service";
 import * as moment from "moment";
+import {
+  LoginResponse,
+  LogoutResponse,
+  RefreshTokenResponse
+} from "../modules/session-management";
 
 @Injectable()
 export class FakeBackendHttpInterceptor implements HttpInterceptor {
   private sessionDurationInMinutes: number = 30
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthServiceImp) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return this.handleRequests(request, next);
@@ -27,17 +31,17 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     const { url, method } = req
 
     if (url.startsWith(this.authService.logInUrl)) {
-      let rep: LoginApiResponse = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
+      let rep: LoginResponse<null> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 
     if (url.startsWith(this.authService.refreshTokenUrl)) {
-      let rep: RefreshTokenApiResponse = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
+      let rep: RefreshTokenResponse<null> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 
     if (url.startsWith(this.authService.logOutUrl)) {
-      let rep: LogoutApiResponse = { logout: true }
+      let rep: LogoutResponse<null> = { logout: true }
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 

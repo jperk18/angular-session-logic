@@ -4,9 +4,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-import {SessionManagementModule} from "./modules/session-management/session-management.module";
+//import {SessionManagementModule} from "./modules/session-management";
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
+import {AuthServiceImp} from "./__dummy/fake-config-and-service";
+import {DummyDataModule} from "./__dummy/dummy.module";
+import {SessionManagementModule} from "./modules/session-management";
 
 @NgModule({
   declarations: [
@@ -15,12 +18,18 @@ import {environment} from '../environments/environment';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    DummyDataModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
-    SessionManagementModule,
+    SessionManagementModule.forRoot({
+      timerIntervalCheckInMilliseconds: 1000,
+      extendSessionRangeInMinutes: 5,
+      refreshBufferInSeconds: 15,
+      loginOrRootPagePath: '/',
+      landingPagePath: '/home'
+    }, AuthServiceImp),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production})
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
