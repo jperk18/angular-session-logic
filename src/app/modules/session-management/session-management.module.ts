@@ -4,7 +4,7 @@ import {EffectsModule} from '@ngrx/effects';
 import {sessionFeatureKey} from "./store/selectors/session.selectors";
 import {hydrationMetaReducer, sessionReducer} from "./store/reducers/session.reducer";
 import {SessionEffects} from "./store/effects/session.effects";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AppendAuthTokenInterceptor, RefreshAuthTokenInterceptor} from "./interceptors";
 import {SessionManagementConfigService, SessionAuthenticationService, AuthenticationService} from "./services";
 import {SessionManagementConfig} from "./services/sessionManagementConfigService/models/session-management.config";
@@ -13,7 +13,6 @@ const metaReducers: MetaReducer[] = [hydrationMetaReducer];
 
 @NgModule({
   imports: [
-    HttpClientModule,
     StoreModule.forFeature(sessionFeatureKey, sessionReducer, {metaReducers}),
     EffectsModule.forFeature([SessionEffects])
   ]

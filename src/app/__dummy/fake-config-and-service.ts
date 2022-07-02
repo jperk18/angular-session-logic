@@ -22,16 +22,19 @@ export class AuthServiceImp implements AuthenticationService {
 
   readonly logInUrl = `${this.baseUrl}/login`
   logIn(req: LoginRequest<AppUserCredentials>): Observable<LoginResponse<null>> {
+    //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<LoginResponse<null>>(`${this.logInUrl}`, req)
   }
 
   readonly logOutUrl = `${this.baseUrl}/logout`
-  logOut(req: LogoutRequest<string>): Observable<LogoutResponse<null>> {
+  logOut(req: LogoutRequest<null>): Observable<LogoutResponse<null>> {
+    //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<LogoutResponse<null>>(`${this.logOutUrl}`, req)
   }
 
   readonly refreshTokenUrl = `${this.baseUrl}/refreshtoken`
   refreshToken(req: RefreshTokenRequest<null>): Observable<RefreshTokenResponse<null>> {
+    //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<RefreshTokenResponse<null>>(`${this.refreshTokenUrl}`, req)
   }
 

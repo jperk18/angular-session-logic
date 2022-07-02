@@ -4,12 +4,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-//import {SessionManagementModule} from "./modules/session-management";
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
 import {AuthServiceImp} from "./__dummy/fake-config-and-service";
 import {DummyDataModule} from "./__dummy/dummy.module";
 import {SessionManagementModule} from "./modules/session-management";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -18,6 +18,7 @@ import {SessionManagementModule} from "./modules/session-management";
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     DummyDataModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
