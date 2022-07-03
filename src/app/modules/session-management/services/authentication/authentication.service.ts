@@ -9,12 +9,19 @@ import {
 } from "./models";
 import {InjectionToken} from "@angular/core";
 
+export type LoginRequestObj = any;
+export type LoginResponseObj = any;
+export type LogoutRequestObj = any;
+export type LogoutResponseObj = any;
+export type RefreshTokenRequestObj = any;
+export type RefreshTokenResponseObj = any;
+
 export interface AuthenticationService {
-  logIn(req: LoginRequest<any>): Observable<LoginResponse<any>>
+  logIn(req: LoginRequest<LoginRequestObj>): Observable<LoginResponse<LoginResponseObj>>
 
-  logOut(req: LogoutRequest<any>): Observable<LogoutResponse<any>>
+  logOut(req: LogoutRequest<LogoutRequestObj>): Observable<LogoutResponse<LogoutResponseObj>>
 
-  refreshToken(req: RefreshTokenRequest<any>): Observable<RefreshTokenResponse<any>>
+  refreshToken(req: RefreshTokenRequest<RefreshTokenRequestObj>): Observable<RefreshTokenResponse<RefreshTokenResponseObj>>
 
   startsWithUrlsToNotRefreshTokenOn(url: string): boolean
 }

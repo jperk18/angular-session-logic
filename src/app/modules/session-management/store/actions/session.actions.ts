@@ -1,8 +1,9 @@
 ﻿import { createAction, props } from '@ngrx/store';
 import {TokenInformation} from "../models/tokenInformation";
-import {LoginRequest, LogoutRequest } from "../../services/authentication/models";
+import {LoginRequest } from "../../services/authentication/models";
+import {LoginRequestObj} from "../../services";
 
-export const Login = createAction('[SESSION] LOGIN', props<LoginRequest<any>>());
+export const Login = createAction('[SESSION] LOGIN', props<LoginRequest<LoginRequestObj>>());
 export const LogOut = createAction('[SESSION] LOGOUT');
 export const RefreshSession = createAction('[SESSION] ATTEMPT REFRESH SESSION', props<{forceSessionExtension: boolean}>());
 
