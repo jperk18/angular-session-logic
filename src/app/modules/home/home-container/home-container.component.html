@@ -1,2 +1,2 @@
-<home-page (logOutClicked)="logout()" (exploreClicked)="explore()"></home-page>
+<home-page [greeting]="(customLoginResponse$ | async)!" (logOutClicked)="logout()" (exploreClicked)="explore()"></home-page>
 <app-extension-popup-container *ngIf="(showExtendPopup$ | async)"></app-extension-popup-container>

@@ -6,7 +6,7 @@ import {
   HttpInterceptor, HttpResponse
 } from '@angular/common/http';
 import {delay, Observable, of} from 'rxjs';
-import {AuthServiceImp} from "./fake-config-and-service";
+import {AppLoginResponse, AuthServiceImp} from "./fake-config-and-service";
 import * as moment from "moment";
 import {
   LoginResponse,
@@ -31,7 +31,7 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     const { url, method } = req
 
     if (url.startsWith(this.authService.logInUrl)) {
-      let rep: LoginResponse<null> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
+      let rep: LoginResponse<AppLoginResponse> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate(), custom: <AppLoginResponse>{ greeting: "Hello User!"}}
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 
@@ -41,7 +41,7 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     }
 
     if (url.startsWith(this.authService.logOutUrl)) {
-      let rep: LogoutResponse<null> = { logout: true }
+      let rep: LogoutResponse = { logout: true }
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 

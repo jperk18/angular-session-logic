@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'home-page',
@@ -6,6 +6,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit {
+  @Input() greeting!: string;
   @Output() logOutClicked: EventEmitter<void> = new EventEmitter<void>()
   @Output() exploreClicked: EventEmitter<void> = new EventEmitter<void>()
 

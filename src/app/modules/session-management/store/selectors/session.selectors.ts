@@ -40,6 +40,20 @@ export const selectLastRefreshTokenTime = createSelector(
   (state: SessionInformation.State) => state.session?.latestRefreshTokenDateTime == undefined ? undefined : new Date(state.session.latestRefreshTokenDateTime)
 );
 
+export const selectCustomLoginResponse = <TServiceResponse>() => {
+  return createSelector(
+    selectSessionFeature,
+    (state: SessionInformation.State) => state.customResponse.loginResponse == undefined ? undefined : <TServiceResponse>state.customResponse.loginResponse
+  );
+};
+
+export const selectCustomRefreshResponse = <TServiceResponse>() => {
+  return createSelector(
+    selectSessionFeature,
+    (state: SessionInformation.State) => state.customResponse.refreshResponse == undefined ? undefined : <TServiceResponse>state.customResponse.refreshResponse
+  );
+};
+
 export const selectShowSessionPopup = createSelector(
   selectExtendSessionStatus,
   selectRefreshSessionStatus,

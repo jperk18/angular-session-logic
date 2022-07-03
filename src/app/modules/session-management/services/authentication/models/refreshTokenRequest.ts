@@ -1,5 +1,4 @@
-﻿export interface RefreshTokenRequest<T> {
+﻿export interface RefreshTokenRequest {
   token: string
-  custom?: T
 }
 

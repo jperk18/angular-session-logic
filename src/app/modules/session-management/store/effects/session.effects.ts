@@ -50,7 +50,7 @@ export class SessionEffects {
       ofType(SessionActions.Login),
       switchMap((action) =>
         this.authService.logIn(action).pipe(
-          map(res => SessionActions.LoginSuccess({token: {value: res.token, expiryDateTime: res.expiryDate}})),
+          map(res => SessionActions.LoginSuccess({token: {value: res.token, expiryDateTime: res.expiryDate}, additionalServiceProps: res.custom})),
           catchError(() => of(SessionActions.LoginFailed))
         )
       )
@@ -99,7 +99,8 @@ export class SessionEffects {
         this.authService.refreshToken({token: action.token}).pipe(
           map(res => SessionActions.RefreshTokenSuccess({
             token: {value: res.token, expiryDateTime: res.expiryDate},
-            latestRefreshTokenDateTime: action.now
+            latestRefreshTokenDateTime: action.now,
+            additionalServiceProps: res.custom
           })),
           catchError(() => of(SessionActions.RefreshTokenFailed()))
         )

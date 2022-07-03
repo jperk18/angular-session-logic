@@ -1,6 +1,7 @@
 ﻿import {ActionReducer, createReducer, INIT, on, UPDATE} from '@ngrx/store';
 import * as SessionsActions from '../actions/session.actions';
 import {TokenInformation} from "../models/tokenInformation";
+import {LoginResponseObj, RefreshTokenResponseObj} from "../../services";
 
 export interface State {
   loggedIn: boolean;
@@ -9,6 +10,10 @@ export interface State {
     extendSessionBlockStatus: boolean
     refreshTokenBlockStatus: boolean
     latestRefreshTokenDateTime?: Date
+  }
+  customResponse: {
+    loginResponse?: LoginResponseObj
+    refreshResponse?: RefreshTokenResponseObj
   }
 }
 
@@ -19,12 +24,21 @@ export const initialState: State = {
     extendSessionBlockStatus: false,
     refreshTokenBlockStatus: false,
     latestRefreshTokenDateTime: undefined
+  },
+  customResponse: {
+    loginResponse: undefined,
+    refreshResponse: undefined
   }
 };
 
 export const sessionReducer = createReducer(
   initialState,
-  on(SessionsActions.LoginSuccess, (state, {token}) => ({...state, loggedIn: true, token: token})),
+  on(SessionsActions.LoginSuccess, (state, {token, additionalServiceProps}) => ({...state, loggedIn: true, token: token,
+    customResponse:{
+      ...state.customResponse,
+      loginResponse: additionalServiceProps
+    }
+  })),
   on(SessionsActions.LoginFailed, () => initialState),
   on(SessionsActions.LogOut, () => initialState),
   on(SessionsActions.ExtendSession, (state) => ({
@@ -35,10 +49,14 @@ export const sessionReducer = createReducer(
     ...state,
     session: { ...state.session, refreshTokenBlockStatus: true }
   })),
-  on(SessionsActions.RefreshTokenSuccess, (state, {token , latestRefreshTokenDateTime}) => ({
+  on(SessionsActions.RefreshTokenSuccess, (state, {token , latestRefreshTokenDateTime, additionalServiceProps}) => ({
     ...state,
     token: token,
-    session: { extendSessionBlockStatus: false, refreshTokenBlockStatus: false, latestRefreshTokenDateTime: latestRefreshTokenDateTime }
+    session: { extendSessionBlockStatus: false, refreshTokenBlockStatus: false, latestRefreshTokenDateTime: latestRefreshTokenDateTime },
+    customResponse: {
+      ...state.customResponse,
+      refreshResponse: additionalServiceProps
+    }
   })),
   on(SessionsActions.RefreshTokenFailed, (state) => ({
     ...state,

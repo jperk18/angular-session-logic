@@ -24,7 +24,7 @@ export class RefreshAuthTokenInterceptor implements HttpInterceptor {
       first(),
       mergeMap(isUserLoggedIn => {
         if (isUserLoggedIn && !this.authService.startsWithUrlsToNotRefreshTokenOn(request.url))
-          this.store.dispatch(RefreshSession({ forceSessionExtension: false }));
+          this.store.dispatch(RefreshSession({}));
         return next.handle(request);
       }),
     )

@@ -1,4 +1,3 @@
-﻿export interface LogoutResponse<T> {
+﻿export interface LogoutResponse {
   logout: boolean
-  custom?: T
 }

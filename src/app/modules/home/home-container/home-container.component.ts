@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as SessionManagement from "../../session-management";
 import {Observable} from "rxjs";
+import {AppLoginResponse} from "../../../__dummy/fake-config-and-service";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'home-container',
@@ -10,9 +12,13 @@ import {Observable} from "rxjs";
 })
 export class HomeContainerComponent implements OnInit {
   showExtendPopup$!: Observable<boolean>
+  customLoginResponse$!: Observable<string>
 
   constructor(private store: Store<SessionManagement.State>) {
     this.showExtendPopup$ = this.store.select(SessionManagement.Selectors.selectShowSessionPopup)
+    this.customLoginResponse$ = this.store.select(SessionManagement.Selectors.selectCustomLoginResponse<AppLoginResponse>()).pipe(map(c =>
+      c?.greeting == undefined ? "Hello" : c.greeting
+    ))
   }
 
   ngOnInit(): void {
@@ -23,6 +29,6 @@ export class HomeContainerComponent implements OnInit {
   }
 
   explore() {
-    this.store.dispatch(SessionManagement.Actions.RefreshSession({forceSessionExtension: false}))
+    this.store.dispatch(SessionManagement.Actions.RefreshSession({}))
   }
 }

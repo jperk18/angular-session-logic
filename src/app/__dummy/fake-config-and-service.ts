@@ -13,6 +13,10 @@ export interface AppUserCredentials{
   password: string
 }
 
+export interface AppLoginResponse{
+  greeting: string
+}
+
 @Injectable()
 export class AuthServiceImp implements AuthenticationService {
   private readonly baseUrl = "https://myauthservice"
@@ -21,19 +25,19 @@ export class AuthServiceImp implements AuthenticationService {
   }
 
   readonly logInUrl = `${this.baseUrl}/login`
-  logIn(req: LoginRequest<AppUserCredentials>): Observable<LoginResponse<null>> {
+  logIn(req: LoginRequest<AppUserCredentials>): Observable<LoginResponse<AppLoginResponse>> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
-    return this.httpClient.post<LoginResponse<null>>(`${this.logInUrl}`, req)
+    return this.httpClient.post<LoginResponse<AppLoginResponse>>(`${this.logInUrl}`, req)
   }
 
   readonly logOutUrl = `${this.baseUrl}/logout`
-  logOut(req: LogoutRequest<null>): Observable<LogoutResponse<null>> {
+  logOut(req: LogoutRequest): Observable<LogoutResponse> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
-    return this.httpClient.post<LogoutResponse<null>>(`${this.logOutUrl}`, req)
+    return this.httpClient.post<LogoutResponse>(`${this.logOutUrl}`, req)
   }
 
   readonly refreshTokenUrl = `${this.baseUrl}/refreshtoken`
-  refreshToken(req: RefreshTokenRequest<null>): Observable<RefreshTokenResponse<null>> {
+  refreshToken(req: RefreshTokenRequest): Observable<RefreshTokenResponse<null>> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<RefreshTokenResponse<null>>(`${this.refreshTokenUrl}`, req)
   }

@@ -1,4 +1,3 @@
-﻿export interface LogoutRequest<T> {
+﻿export interface LogoutRequest {
   token: string
-  custom?: T
 }
