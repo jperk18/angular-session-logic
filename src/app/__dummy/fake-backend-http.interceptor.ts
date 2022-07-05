@@ -36,7 +36,7 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     }
 
     if (url.startsWith(this.authService.refreshTokenUrl)) {
-      let rep: RefreshTokenResponse<null> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()}
+      let rep: RefreshTokenResponse<string> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate(), custom: "refreshModelIfNeeded"}
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 

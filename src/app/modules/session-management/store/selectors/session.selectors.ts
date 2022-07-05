@@ -1,5 +1,6 @@
 ﻿import {createFeatureSelector, createSelector} from '@ngrx/store';
 import * as SessionInformation from "../reducers/session.reducer";
+import {ServiceStateResponse} from "../models/serviceStateResponse";
 
 export const sessionFeatureKey = 'session';
 
@@ -40,17 +41,17 @@ export const selectLastRefreshTokenTime = createSelector(
   (state: SessionInformation.State) => state.session?.latestRefreshTokenDateTime == undefined ? undefined : new Date(state.session.latestRefreshTokenDateTime)
 );
 
-export const selectCustomLoginResponse = <TServiceResponse>() => {
+export const selectCustomLoginResponse = <TServiceResponse, TErrorResponse>() => {
   return createSelector(
     selectSessionFeature,
-    (state: SessionInformation.State) => state.customResponse.loginResponse == undefined ? undefined : <TServiceResponse>state.customResponse.loginResponse
+    (state: SessionInformation.State) => state.customResponse.loginResponse == undefined ? undefined : <ServiceStateResponse<TServiceResponse, TErrorResponse>>state.customResponse.loginResponse
   );
 };
 
-export const selectCustomRefreshResponse = <TServiceResponse>() => {
+export const selectCustomRefreshResponse = <TServiceResponse, TErrorResponse>() => {
   return createSelector(
     selectSessionFeature,
-    (state: SessionInformation.State) => state.customResponse.refreshResponse == undefined ? undefined : <TServiceResponse>state.customResponse.refreshResponse
+    (state: SessionInformation.State) => state.customResponse.refreshResponse == undefined ? undefined : <ServiceStateResponse<TServiceResponse, TErrorResponse>>state.customResponse.refreshResponse
   );
 };
 

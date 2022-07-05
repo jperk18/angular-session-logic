@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import { first, Observable} from 'rxjs';
+import {combineLatest, first, Observable} from 'rxjs';
 import {Store} from "@ngrx/store";
 import * as fromSession from "../../store/reducers/session.reducer";
 import {selectIsUserLoggedIn} from "../../store/selectors/session.selectors";
@@ -20,10 +20,10 @@ export class RefreshAuthTokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return this.store.select(selectIsUserLoggedIn).pipe(
+    return combineLatest([this.store.select(selectIsUserLoggedIn), this.authService.isUrlToRefreshTokenOn(request.url)]).pipe(
       first(),
-      mergeMap(isUserLoggedIn => {
-        if (isUserLoggedIn && !this.authService.startsWithUrlsToNotRefreshTokenOn(request.url))
+      mergeMap(([isUserLoggedIn, isUrlToRefreshTokenOn]) => {
+        if (isUserLoggedIn && isUrlToRefreshTokenOn)
           this.store.dispatch(RefreshSession({}));
         return next.handle(request);
       }),

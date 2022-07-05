@@ -20,7 +20,9 @@ export interface AuthenticationService {
 
   refreshToken(req: RefreshTokenRequest): Observable<RefreshTokenResponse<RefreshTokenResponseObj>>
 
-  startsWithUrlsToNotRefreshTokenOn(url: string): boolean
+  isUrlToRefreshTokenOn(url: string): Observable<boolean>
+
+  isUrlToAppendTokenOn(url: string): Observable<boolean>
 }
 
 export const SessionAuthenticationService = new InjectionToken<AuthenticationService>("AuthenticationService")

@@ -2,6 +2,8 @@
 import * as SessionsActions from '../actions/session.actions';
 import {TokenInformation} from "../models/tokenInformation";
 import {LoginResponseObj, RefreshTokenResponseObj} from "../../services";
+import {ServiceStateResponse} from "../models/serviceStateResponse";
+
 
 export interface State {
   loggedIn: boolean;
@@ -12,8 +14,8 @@ export interface State {
     latestRefreshTokenDateTime?: Date
   }
   customResponse: {
-    loginResponse?: LoginResponseObj
-    refreshResponse?: RefreshTokenResponseObj
+    loginResponse: ServiceStateResponse<LoginResponseObj, any>
+    refreshResponse: ServiceStateResponse<RefreshTokenResponseObj, any>
   }
 }
 
@@ -26,41 +28,76 @@ export const initialState: State = {
     latestRefreshTokenDateTime: undefined
   },
   customResponse: {
-    loginResponse: undefined,
-    refreshResponse: undefined
+    loginResponse: {
+      success: undefined,
+      failed: undefined
+    },
+    refreshResponse: {
+      success: undefined,
+      failed: undefined
+    },
   }
 };
 
 export const sessionReducer = createReducer(
   initialState,
-  on(SessionsActions.LoginSuccess, (state, {token, additionalServiceProps}) => ({...state, loggedIn: true, token: token,
-    customResponse:{
+  on(SessionsActions.LoginSuccess, (state, {token, additionalServiceProps}) => ({
+    ...state, loggedIn: true, token: token,
+    customResponse: {
       ...state.customResponse,
-      loginResponse: additionalServiceProps
+      loginResponse: {
+        success: additionalServiceProps,
+        failed: undefined
+      }
     }
   })),
-  on(SessionsActions.LoginFailed, () => initialState),
+  on(SessionsActions.LoginFailed, (state, {errorResponse}) => ({
+    ...initialState,
+    customResponse: {
+      ...state.customResponse,
+      loginResponse: {
+        success: undefined,
+        failed: errorResponse
+      }
+    }
+  })),
   on(SessionsActions.LogOut, () => initialState),
   on(SessionsActions.ExtendSession, (state) => ({
     ...state,
-    session: { ...state.session, extendSessionBlockStatus: true }
+    session: {...state.session, extendSessionBlockStatus: true}
   })),
   on(SessionsActions.RefreshToken, (state) => ({
     ...state,
-    session: { ...state.session, refreshTokenBlockStatus: true }
+    session: {...state.session, refreshTokenBlockStatus: true}
   })),
-  on(SessionsActions.RefreshTokenSuccess, (state, {token , latestRefreshTokenDateTime, additionalServiceProps}) => ({
+  on(SessionsActions.RefreshTokenSuccess, (state, {token, latestRefreshTokenDateTime, additionalServiceProps}) => ({
     ...state,
     token: token,
-    session: { extendSessionBlockStatus: false, refreshTokenBlockStatus: false, latestRefreshTokenDateTime: latestRefreshTokenDateTime },
-    customResponse: {
+    session: {
+      extendSessionBlockStatus: false,
+      refreshTokenBlockStatus: false,
+      latestRefreshTokenDateTime: latestRefreshTokenDateTime
+    },
+    customResponse:
+      {
       ...state.customResponse,
-      refreshResponse: additionalServiceProps
+      refreshResponse: {
+        success: additionalServiceProps,
+        failed: undefined
+      }
     }
   })),
-  on(SessionsActions.RefreshTokenFailed, (state) => ({
+  on(SessionsActions.RefreshTokenFailed, (state, { errorResponse }) => ({
     ...state,
-    session: { ...state.session, extendSessionBlockStatus: false, refreshTokenBlockStatus: false }
+    session: {...state.session, extendSessionBlockStatus: false, refreshTokenBlockStatus: false},
+    customResponse:
+      {
+        ...state.customResponse,
+        refreshResponse: {
+          success: undefined,
+          failed: errorResponse
+        }
+      }
   }))
 );
 

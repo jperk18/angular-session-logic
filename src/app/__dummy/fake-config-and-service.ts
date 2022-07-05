@@ -4,7 +4,7 @@
   RefreshTokenRequest, RefreshTokenResponse,
   AuthenticationService
 } from "../modules/session-management";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 
@@ -15,6 +15,10 @@ export interface AppUserCredentials{
 
 export interface AppLoginResponse{
   greeting: string
+}
+
+export interface AppLoginError{
+  messages: string[]
 }
 
 @Injectable()
@@ -37,13 +41,18 @@ export class AuthServiceImp implements AuthenticationService {
   }
 
   readonly refreshTokenUrl = `${this.baseUrl}/refreshtoken`
-  refreshToken(req: RefreshTokenRequest): Observable<RefreshTokenResponse<null>> {
+  refreshToken(req: RefreshTokenRequest): Observable<RefreshTokenResponse<string>> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
-    return this.httpClient.post<RefreshTokenResponse<null>>(`${this.refreshTokenUrl}`, req)
+    return this.httpClient.post<RefreshTokenResponse<string>>(`${this.refreshTokenUrl}`, req)
   }
 
-  startsWithUrlsToNotRefreshTokenOn(url:string): boolean {
-    let authUrls = [this.logInUrl, this.logOutUrl, this.refreshTokenUrl]
-    return authUrls.some(e => e.startsWith(url))
+  isUrlToAppendTokenOn(url: string): Observable<boolean> {
+    let urls = [this.logInUrl]
+    return of(!urls.some(e => e.startsWith(url)));
+  }
+
+  isUrlToRefreshTokenOn(url: string): Observable<boolean> {
+    let urls = [this.logInUrl, this.logOutUrl, this.refreshTokenUrl]
+    return of(!urls.some(e => e.startsWith(url)))
   }
 }

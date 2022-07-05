@@ -19,10 +19,10 @@ export class AppendAuthTokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return combineLatest([this.store.select(selectIsUserLoggedIn), this.store.select(selectTokenValue)]).pipe(
+    return combineLatest([this.store.select(selectIsUserLoggedIn), this.store.select(selectTokenValue), this.authService.isUrlToAppendTokenOn(request.url)]).pipe(
       first(),
-      mergeMap(([isUserLoggedIn, token]) => {
-        if (isUserLoggedIn && !this.authService.startsWithUrlsToNotRefreshTokenOn(request.url)) {
+      mergeMap(([isUserLoggedIn, token, isUrlToAppendTokenOn]) => {
+        if (isUserLoggedIn && isUrlToAppendTokenOn) {
           request = request.clone({
             setHeaders: {Authorization: `Bearer ${token}`}
           });
