@@ -1,5 +1,6 @@
 ﻿export interface LoginResponse<T> {
-  token: string
+  idToken: string
+  accessToken: string
   expiryDate: Date
   custom?: T
 }

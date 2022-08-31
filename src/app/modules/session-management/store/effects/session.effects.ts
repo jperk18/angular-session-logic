@@ -50,7 +50,7 @@ export class SessionEffects {
       ofType(SessionActions.Login),
       switchMap((action) =>
         this.authService.logIn(action).pipe(
-          map(res => SessionActions.LoginSuccess({token: {value: res.token, expiryDateTime: res.expiryDate}, additionalServiceProps: res.custom})),
+          map(res => SessionActions.LoginSuccess({token: {value: res.accessToken, expiryDateTime: res.expiryDate}, additionalServiceProps: res.custom})),
           catchError((e) => of(SessionActions.LoginFailed({ errorResponse: e })))
         )
       )

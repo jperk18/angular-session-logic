@@ -31,7 +31,26 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     const { url, method } = req
 
     if (url.startsWith(this.authService.logInUrl)) {
-      let rep: LoginResponse<AppLoginResponse> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate(), custom: <AppLoginResponse>{ greeting: "Hello User!"}}
+      let token = ""
+
+      switch(req.body.credentials.username){
+        case("jane"):
+          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbmUgU21pdGgiLCJpYXQiOjE1MTYyMzkwMjIsImNsYWltcyI6W3sicm9sZSI6Imd1ZXN0Iiwic2NvcGUiOiJjbGllbnRfbmFtZSJ9XX0.MYF_xbsx_-gWAVPcBjw_JthqOnQ2D7lmdYB_z5jEgZI"
+          break;
+        case('homelander'):
+          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbWVsYW5kZXIiLCJpYXQiOjE1MTYyMzkwMjIsImNsYWltcyI6W3sicm9sZSI6ImFkbWluIiwic2NvcGUiOiJhbGwifV19.RhMEIGp3jbQQklbTDfJH0KPYlSMMsciJTk-gAIQViEQ"
+          break;
+        case('john'):
+        default:
+          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJjbGFpbXMiOlt7InJvbGUiOiJ1c2VyIiwic2NvcGUiOiJyZWFkX29ubHlfYWxsIn1dfQ.IT2OA4yzzvDSSrFH3TcAqVnO1Mnfa_l0mbAW7DXEtEI"
+          break;
+      }
+
+      let rep: LoginResponse<AppLoginResponse> = { 
+        idToken: FakeBackendHttpInterceptor.makeRandom(50),
+        accessToken: token,
+        expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()
+      }
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 
