@@ -20,8 +20,7 @@ export class ProfileEffects {
 
     loginAfterFail$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(SessionActions.LoginSuccess),
-      ofType(SessionActions.LoginFailed),
+      ofType(SessionActions.LogOut, SessionActions.LoginFailed),
       map(x => ProfileActions.ClearProfile())
     ))
 }
