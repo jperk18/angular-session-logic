@@ -17,4 +17,6 @@ export const RefreshTokenFailed = createAction('[SESSION] (INTERNAL) REFRESH TOK
 export const ExtendSession = createAction('[SESSION] (INTERNAL) EXTEND SESSION');
 export const LoginSuccess = createAction('[SESSION] (INTERNAL) LOGIN SUCCESS', props<{token: TokenInformation, additionalServiceProps?: LoginResponseObj}>());
 export const LoginFailed = createAction('[SESSION] (INTERNAL) LOGIN FAILED', props<{errorResponse: any}>());
+export const LogOutSuccess = createAction('[SESSION] (INTERNAL) LOGOUT SUCCESS');
+
 

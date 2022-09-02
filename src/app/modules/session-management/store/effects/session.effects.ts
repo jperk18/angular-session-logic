@@ -57,24 +57,33 @@ export class SessionEffects {
     )
   );
 
-  loginAfterFail$ = createEffect(() =>
+  logOut$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SessionActions.LogOut),
+      tap(() => this.router.navigate([this.config.loginOrRootPagePath])),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectTokenValue)),
       switchMap(([action, token]) =>
         this.authService.logOut({token: <string>token}).pipe(
-          map(res => this.router.navigate([this.config.loginOrRootPagePath])),
-          catchError(() => this.router.navigate([this.config.loginOrRootPagePath]))
+          map(res => SessionActions.LogOutSuccess()),
+          catchError(() => of(SessionActions.LogOutSuccess()))
         )
       )
-    ), {dispatch: false})
+    )
+  )
 
+  //Only if reeded because of gaurding
+  loginOutSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SessionActions.LogOutSuccess),
+      tap(() => this.router.navigate([this.config.loginOrRootPagePath]))
+    ), {dispatch: false})
+    
   loginAfterSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SessionActions.LoginSuccess),
       tap(() => this.router.navigate([this.config.landingPagePath]))
     ), {dispatch: false})
-
+  
   refreshSession$ = createEffect(() => this.actions$.pipe(
       ofType(SessionActions.RefreshSession),
       concatLatestFrom(action => this.store.select(SessionSelectors.selectLastRefreshTokenTime)),
