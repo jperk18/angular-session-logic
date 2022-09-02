@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import * as SessionManagement from "../modules/session-management";
+import * as SessionManagement from "../../session-management";
 
 @Injectable()
 export class LoginAuthGuard implements CanActivate {

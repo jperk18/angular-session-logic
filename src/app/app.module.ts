@@ -10,8 +10,7 @@ import {DummyDataModule} from "./__dummy/dummy.module";
 import {AuthServiceImp} from "./__dummy/fake-config-and-service";
 import {SessionManagementModule} from "./modules/session-management";
 import { ProfileManagementModule } from './modules/profile-management/profile-management.module';
-import { SiteAuthGuard } from './guards/site.auth.guard';
-import { LoginAuthGuard } from './guards/login.auth.guard';
+import {SharedModule} from "./modules/shared";
 
 @NgModule({
   declarations: [
@@ -20,6 +19,7 @@ import { LoginAuthGuard } from './guards/login.auth.guard';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    SharedModule,
     DummyDataModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
@@ -32,10 +32,6 @@ import { LoginAuthGuard } from './guards/login.auth.guard';
     }, AuthServiceImp),
     ProfileManagementModule,
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production})
-  ],
-  providers:[
-    SiteAuthGuard,
-    LoginAuthGuard
   ],
   bootstrap: [AppComponent]
 })
