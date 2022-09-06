@@ -23,24 +23,32 @@ export interface AppLoginError{
 
 @Injectable()
 export class AuthServiceImp implements AuthenticationService {
-  private readonly baseUrl = "https://myauthservice"
+  //This should be driven from angular configuration. However this demo 
+  private readonly authConfig = {
+    issuer: "https://xxxxxxxxxx/oidc/2",
+    redirectUri: "https://xxxxxxxxxx",
+    clientId: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    responseType: "id_token token",
+    scope: "profile",
+    showDebugInformtion: true
+  }
 
   constructor(private httpClient: HttpClient) {
   }
 
-  readonly logInUrl = `${this.baseUrl}/login`
+  readonly logInUrl = `${this.authConfig.issuer}/login`
   logIn(req: LoginRequest<AppUserCredentials>): Observable<LoginResponse<AppLoginResponse>> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<LoginResponse<AppLoginResponse>>(`${this.logInUrl}`, req)
   }
 
-  readonly logOutUrl = `${this.baseUrl}/logout`
+  readonly logOutUrl = `${this.authConfig.issuer}/logout`
   logOut(req: LogoutRequest): Observable<LogoutResponse> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<LogoutResponse>(`${this.logOutUrl}`, req)
   }
 
-  readonly refreshTokenUrl = `${this.baseUrl}/refreshtoken`
+  readonly refreshTokenUrl = `${this.authConfig.issuer}/refreshtoken`
   refreshToken(req: RefreshTokenRequest): Observable<RefreshTokenResponse<string>> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<RefreshTokenResponse<string>>(`${this.refreshTokenUrl}`, req)

@@ -1,7 +1,9 @@
 ﻿export interface LoginResponse<T> {
-  idToken: string
-  accessToken: string
-  expiryDate: Date
+  id_token: string
+  access_token: string
+  refresh_token: string
+  token_type: string
+  expires_in: Date
   custom?: T
 }
 

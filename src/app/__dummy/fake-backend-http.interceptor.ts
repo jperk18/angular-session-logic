@@ -35,21 +35,23 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
 
       switch(req.body.credentials.username){
         case("jane"):
-          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkphbmUgU21pdGgiLCJpYXQiOjE1MTYyMzkwMjIsImNsYWltcyI6W3sicm9sZSI6Imd1ZXN0Iiwic2NvcGUiOiJjbGllbnRfbmFtZSJ9XX0.MYF_xbsx_-gWAVPcBjw_JthqOnQ2D7lmdYB_z5jEgZI"
+          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSmFuZSBTbWl0aCIsImNsYWltcyI6W3sicm9sZSI6Imd1ZXN0Iiwic2NvcGUiOiJjbGllbnRfbmFtZSJ9XSwiZW1haWwiOiJqYW5lX3NtaXRoQHh4eHh4eC5jb20iLCJpYXQiOjE2NDc3NzMzOTIsInByZWZlcnJlZF91c2VybmFtZSI6ImphbmVfc21pdGgiLCJzdWIiOiIxMjM0NTY3ODkwIiwidXBkYXRlZF9hdCI6MTY0Nzc3MzM5MiwiZXhwIjoxNjQ3NzczMzkyfQ.U0ohhberXFKLRoW6wyw75U-Q_B3xm3HpVgRzT6bZqJ0"
           break;
         case('homelander'):
-          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbWVsYW5kZXIiLCJpYXQiOjE1MTYyMzkwMjIsImNsYWltcyI6W3sicm9sZSI6ImFkbWluIiwic2NvcGUiOiJhbGwifV19.RhMEIGp3jbQQklbTDfJH0KPYlSMMsciJTk-gAIQViEQ"
+          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSG9tZWxhbmRlciIsImNsYWltcyI6W3sicm9sZSI6ImFkbWluIiwic2NvcGUiOiJhbGwifV0sImVtYWlsIjoiaG9tZWxhbmRlckB4eHh4eHguY29tIiwiaWF0IjoxNjQ3NzczMzkyLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJob21lX2xhbmRlciIsInN1YiI6IjEyMzQ1Njc4OTAiLCJ1cGRhdGVkX2F0IjoxNjQ3NzczMzkyLCJleHAiOjE2NDc3NzMzOTJ9.cibzYPwe5nooBGLgBrvG0qUBbKubwNVGSphb0fVWBUI"
           break;
         case('john'):
         default:
-          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJjbGFpbXMiOlt7InJvbGUiOiJ1c2VyIiwic2NvcGUiOiJyZWFkX29ubHlfYWxsIn1dfQ.IT2OA4yzzvDSSrFH3TcAqVnO1Mnfa_l0mbAW7DXEtEI"
+          token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJjbGFpbXMiOlt7InJvbGUiOiJ1c2VyIiwic2NvcGUiOiJyZWFkX29ubHlfYWxsIn1dLCJlbWFpbCI6ImpvaG5fZG9lQHh4eHh4eC5jb20iLCJpYXQiOjE2NDc3NzMzOTIsInByZWZlcnJlZF91c2VybmFtZSI6ImpvaG5fZG9lIiwic3ViIjoiMTIzNDU2Nzg5MCIsInVwZGF0ZWRfYXQiOjE2NDc3NzMzOTIsImV4cCI6MTY0Nzc3MzM5Mn0.wBml4ktShIcDa_sZ3HUfcexcIlzfRSGcuw3nvj50-j4"
           break;
       }
 
       let rep: LoginResponse<AppLoginResponse> = { 
-        idToken: FakeBackendHttpInterceptor.makeRandom(50),
-        accessToken: token,
-        expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()
+        id_token: FakeBackendHttpInterceptor.makeRandom(50),
+        access_token: token,
+        refresh_token: FakeBackendHttpInterceptor.makeRandom(50),
+        token_type: 'Bearer',
+        expires_in: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()
       }
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }

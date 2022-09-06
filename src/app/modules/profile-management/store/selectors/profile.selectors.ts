@@ -15,9 +15,14 @@ export const selectProfile = createSelector(
   (state: ProfileInformation.State) => state.profile
 );
 
-export const selectProfileName = createSelector(
+export const selectProfileFullName = createSelector(
   selectProfileFeature,
   (state: ProfileInformation.State) => state.profile?.name
+);
+
+export const selectProfileUserName = createSelector(
+  selectProfileFeature,
+  (state: ProfileInformation.State) => state.profile?.preferred_username
 );
 
 export const selectProfileHasRole = (role: Role) => {

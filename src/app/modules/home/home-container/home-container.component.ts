@@ -21,8 +21,8 @@ export class HomeContainerComponent implements OnInit {
 
   constructor(private store: Store<SessionManagement.State>, private profileStore: Store<ProfileManagement.State>) {
     this.showExtendPopup$ = this.store.select(SessionManagement.Selectors.selectShowSessionPopup)
-    this.username$ = this.profileStore.select(ProfileManagement.Selectors.selectProfileName).pipe(map(name => <string>name))
-    this.customLoginResponse$ = this.username$.pipe(map(name => `Hello ${name}`))
+    this.username$ = this.profileStore.select(ProfileManagement.Selectors.selectProfileUserName).pipe(map(name => <string>name))
+    this.customLoginResponse$ = this.profileStore.select(ProfileManagement.Selectors.selectProfileFullName).pipe(map(name => <string>name), map(name => `Hello ${name}`))
     
     //this.customLoginResponse$ = 
     // this.store.select(SessionManagement.Selectors.selectCustomLoginResponse<AppLoginResponse, AppLoginError>()).pipe(map(c =>
