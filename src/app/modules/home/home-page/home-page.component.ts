@@ -7,6 +7,10 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
   @Input() greeting!: string;
+  @Input() username!: string;
+  @Input() isUser!: boolean;
+  @Input() isAdmin!: boolean;
+  @Input() isGuest!: boolean;
   @Output() logOutClicked: EventEmitter<void> = new EventEmitter<void>()
   @Output() exploreClicked: EventEmitter<void> = new EventEmitter<void>()
 

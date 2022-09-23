@@ -1,2 +1,10 @@
-<home-page [greeting]="(customLoginResponse$ | async)!" (logOutClicked)="logout()" (exploreClicked)="explore()"></home-page>
+<home-page 
+    [greeting]="(customLoginResponse$ | async)!"
+    [username]="(username$ | async)!"
+    [isGuest]="(isGuest$ | async)!"
+    [isAdmin]="(isAdmin$ | async)!"
+    [isUser]="(isUser$ | async)!"
+    (logOutClicked)="logout()" 
+    (exploreClicked)="explore()">
+</home-page>
 <app-extension-popup-container *ngIf="(showExtendPopup$ | async)"></app-extension-popup-container>

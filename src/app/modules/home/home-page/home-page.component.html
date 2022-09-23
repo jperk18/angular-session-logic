@@ -1,6 +1,15 @@
 <p>{{greeting}}</p>
 <br/>
 <br/>
+<div class="info-block">
+    <div>Username:</div><div>{{username}}</div><br/>
+    <div>Claims:</div><br/>
+    <div>+User:</div><div>{{isUser}}</div><br/>
+    <div>+Admin:</div><div>{{isAdmin}}</div><br/>
+    <div>+Guest:</div><div>{{isGuest}}</div><br/>
+</div>
+<br/>
+<br/>
 <button (click)="explore()">Explore site (API called, causing session token refresh side effect)</button>
 <br/>
 <br/>
