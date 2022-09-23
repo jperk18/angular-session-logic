@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import * as SessionManagement from "../../session-management";
+import * as SessionManagement from '@core/session-management'
 import {Observable} from "rxjs";
 
 @Component({

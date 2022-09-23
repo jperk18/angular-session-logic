@@ -12,7 +12,7 @@ import {
   LoginResponse,
   LogoutResponse,
   RefreshTokenResponse
-} from "../modules/session-management";
+} from "@core/session-management";
 
 @Injectable()
 export class FakeBackendHttpInterceptor implements HttpInterceptor {

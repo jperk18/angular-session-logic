@@ -5,6 +5,7 @@ export * from "./session-management.module"
 //Service Interfaces and models and module configuration for implementation from outside for setup
 export {AuthenticationService} from "./services/authentication/authentication.service"
 export * from "./services/authentication/models"
+
 export * from "./services/sessionManagementConfigService/session-management-config.service"
 
 //State for outside module use

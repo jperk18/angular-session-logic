@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserCredentials} from "../models";
 import {Store} from "@ngrx/store";
-import * as SessionManagement from "../../session-management";
-import {AppUserCredentials} from "../../../__dummy/fake-config-and-service";
+import * as SessionManagement from '@core/session-management'
+import {AppUserCredentials} from "@dummy/fake-config-and-service";
 
 @Component({
   selector: 'login-container',

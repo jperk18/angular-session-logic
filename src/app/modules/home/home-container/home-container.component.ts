@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import * as SessionManagement from "../../session-management";
-import * as ProfileManagement from "../../profile-management";
+import * as SessionManagement from '@core/session-management'
+import * as ProfileManagement from "@core/profile-management";
 import {Observable} from "rxjs";
-import {AppLoginError, AppLoginResponse} from "../../../__dummy/fake-config-and-service";
 import {map} from "rxjs/operators";
 
 @Component({

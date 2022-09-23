@@ -3,7 +3,7 @@
   LogoutResponse,
   RefreshTokenRequest, RefreshTokenResponse,
   AuthenticationService
-} from "../modules/session-management";
+} from "@core/session-management";
 import {Observable, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";

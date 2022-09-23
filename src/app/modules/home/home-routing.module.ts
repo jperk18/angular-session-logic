@@ -1,22 +1,19 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {HomeContainerComponent} from "./home-container/home-container.component";
-import {AuthenticatedGuard} from "./guards/authenticated.guard";
+import {SiteAuthGuard} from "@shared/guards";
 
 const routes: Routes = [
   {
     path: "",
-    canActivate:[AuthenticatedGuard],
+    canActivate:[SiteAuthGuard],
     component: HomeContainerComponent
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  providers: [
-    AuthenticatedGuard,
-  ]
+  exports: [RouterModule]
 })
 export class HomeRoutingModule {
 }
