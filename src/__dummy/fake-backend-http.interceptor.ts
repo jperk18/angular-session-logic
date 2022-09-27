@@ -47,9 +47,9 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
       }
 
       let rep: LoginResponse<AppLoginResponse> = { 
-        id_token: FakeBackendHttpInterceptor.makeRandom(50),
+        id_token: FakeBackendHttpInterceptor.makeRandom(350),
         access_token: token,
-        refresh_token: FakeBackendHttpInterceptor.makeRandom(50),
+        refresh_token: FakeBackendHttpInterceptor.makeRandom(350),
         token_type: 'Bearer',
         expires_in: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate()
       }
@@ -57,7 +57,13 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     }
 
     if (url.startsWith(this.authService.refreshTokenUrl)) {
-      let rep: RefreshTokenResponse<string> = { token: FakeBackendHttpInterceptor.makeRandom(50), expiryDate: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate(), custom: "refreshModelIfNeeded"}
+      let rep: RefreshTokenResponse<string> = { 
+        access_token: FakeBackendHttpInterceptor.makeRandom(350), 
+        refresh_token: FakeBackendHttpInterceptor.makeRandom(350), 
+        token_type: "Bearer",
+        expires_in: moment().add(this.sessionDurationInMinutes, <moment.unitOfTime.DurationConstructor>"minute").toDate(), 
+        custom: "refreshModelIfNeeded"
+      }
       return of(new HttpResponse({ status: 200, body: rep })).pipe(delay(500));
     }
 
@@ -69,7 +75,15 @@ export class FakeBackendHttpInterceptor implements HttpInterceptor {
     return next.handle(req);
   }
 
-  private static makeRandom(lengthOfCode: number, possible: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,./;'[]\=-)(*&^%$#@!~`") {
+  private static makeRandom(lengthOfCode: number, possible: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890") {
+    let text = "";
+    for (let i = 0; i < lengthOfCode; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
+  private static makePureRandom(lengthOfCode: number, possible: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,./;'[]\=-)(*&^%$#@!~`") {
     let text = "";
     for (let i = 0; i < lengthOfCode; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));

@@ -16,14 +16,24 @@ export const selectIsUserLoggedIn = createSelector(
   (state: SessionInformation.State) => state.loggedIn
 );
 
-export const selectTokenValue = createSelector(
+export const selectIdTokenValue = createSelector(
   selectSessionFeature,
-  (state: SessionInformation.State) => state.token?.value
+  (state: SessionInformation.State) => state.tokens?.id
+);
+
+export const selectAccessTokenValue = createSelector(
+  selectSessionFeature,
+  (state: SessionInformation.State) => state.tokens?.access
+);
+
+export const selectRefreshTokenValue = createSelector(
+  selectSessionFeature,
+  (state: SessionInformation.State) => state.tokens?.refresh
 );
 
 export const selectTokenExpiryDateTime = createSelector(
   selectSessionFeature,
-  (state: SessionInformation.State) => state.token?.expiryDateTime == undefined ? undefined : new Date(state.token.expiryDateTime)
+  (state: SessionInformation.State) => state.tokenExpiry == undefined ? undefined : new Date(state.tokenExpiry)
 );
 
 export const selectExtendSessionStatus = createSelector(

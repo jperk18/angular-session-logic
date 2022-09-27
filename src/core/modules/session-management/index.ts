@@ -18,3 +18,6 @@ export * as Selectors from './store/selectors/session.selectors'
 import {Login, LogOut, RefreshSession} from "./store/actions/session.actions";
 export const Actions = { Login, LogOut, RefreshSession }
 
+//Actions for outside module use for (SAML) auth this module
+import {LoginSuccess} from "./store/actions/session.actions";
+export const AlternativeActions = { LoginSuccess }

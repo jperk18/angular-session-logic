@@ -1,4 +1,4 @@
 ﻿export interface RefreshTokenRequest {
-  token: string
+  refresh_token: string
 }
 

@@ -1,5 +1,7 @@
 ﻿export interface RefreshTokenResponse<T> {
-  token: string
-  expiryDate: Date
+  access_token: string
+  refresh_token: string
+  token_type: string
+  expires_in: Date
   custom?: T
 }

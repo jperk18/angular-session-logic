@@ -15,7 +15,7 @@ export class ProfileEffects {
   loginAfterSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SessionActions.LoginSuccess),
-      map(x => ProfileActions.SetProfile({ profile: jwtDecode(x.token.value) }))
+      map(x => ProfileActions.SetProfile({ profile: jwtDecode(x.acccess) }))
     ))
 
     loginAfterFail$ = createEffect(() =>

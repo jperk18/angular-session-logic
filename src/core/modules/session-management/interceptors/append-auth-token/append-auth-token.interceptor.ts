@@ -9,7 +9,7 @@ import {combineLatest, first, Observable} from 'rxjs';
 import {SessionAuthenticationService, AuthenticationService} from "../../services";
 import {Store} from "@ngrx/store";
 import * as fromSession from "../../store/reducers/session.reducer";
-import {selectIsUserLoggedIn, selectTokenValue} from "../../store/selectors/session.selectors";
+import {selectAccessTokenValue, selectIsUserLoggedIn } from "../../store/selectors/session.selectors";
 import {mergeMap} from "rxjs/operators";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AppendAuthTokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return combineLatest([this.store.select(selectIsUserLoggedIn), this.store.select(selectTokenValue), this.authService.isUrlToAppendTokenOn(request.url)]).pipe(
+    return combineLatest([this.store.select(selectIsUserLoggedIn), this.store.select(selectAccessTokenValue), this.authService.isUrlToAppendTokenOn(request.url)]).pipe(
       first(),
       mergeMap(([isUserLoggedIn, token, isUrlToAppendTokenOn]) => {
         if (isUserLoggedIn && isUrlToAppendTokenOn) {

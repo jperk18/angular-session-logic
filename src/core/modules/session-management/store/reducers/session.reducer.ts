@@ -1,13 +1,17 @@
 ﻿import {ActionReducer, createReducer, INIT, on, UPDATE} from '@ngrx/store';
 import * as SessionsActions from '../actions/session.actions';
-import {TokenInformation} from "../models/tokenInformation";
 import {LoginResponseObj, RefreshTokenResponseObj} from "../../services";
 import {ServiceStateResponse} from "../models/serviceStateResponse";
 
 
 export interface State {
   loggedIn: boolean;
-  token?: TokenInformation;
+  tokens?: {
+    id: string
+    access: string
+    refresh: string
+  },
+  tokenExpiry?: Date,
   session: {
     extendSessionBlockStatus: boolean
     refreshTokenBlockStatus: boolean
@@ -21,7 +25,8 @@ export interface State {
 
 export const initialState: State = {
   loggedIn: false,
-  token: undefined,
+  tokens: undefined,
+  tokenExpiry: undefined,
   session: {
     extendSessionBlockStatus: false,
     refreshTokenBlockStatus: false,
@@ -41,8 +46,14 @@ export const initialState: State = {
 
 export const sessionReducer = createReducer(
   initialState,
-  on(SessionsActions.LoginSuccess, (state, {token, additionalServiceProps}) => ({
-    ...state, loggedIn: true, token: token,
+  on(SessionsActions.LoginSuccess, (state, {id, acccess, refresh, expires, additionalServiceProps}) => ({
+    ...state, loggedIn: true, 
+    tokens: {
+      id: id,
+      access: acccess,
+      refresh: refresh
+    },
+    tokenExpiry: expires,
     customResponse: {
       ...state.customResponse,
       loginResponse: {
@@ -70,9 +81,14 @@ export const sessionReducer = createReducer(
     ...state,
     session: {...state.session, refreshTokenBlockStatus: true}
   })),
-  on(SessionsActions.RefreshTokenSuccess, (state, {token, latestRefreshTokenDateTime, additionalServiceProps}) => ({
+  on(SessionsActions.RefreshTokenSuccess, (state, {acccess, refresh, expires, latestRefreshTokenDateTime, additionalServiceProps}) => ({
     ...state,
-    token: token,
+    tokens: {
+      ...state.tokens!,
+      access: acccess,
+      refresh: refresh
+    },
+    tokenExpiry: expires,
     session: {
       extendSessionBlockStatus: false,
       refreshTokenBlockStatus: false,
