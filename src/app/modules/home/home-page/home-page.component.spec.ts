@@ -6,16 +6,18 @@ describe('HomePageComponent', () => {
   let component: HomePageComponent;
   let fixture: ComponentFixture<HomePageComponent>;
 
-  beforeEach(async () => {
+  beforeAll((async () => {
     await TestBed.configureTestingModule({
       declarations: [ HomePageComponent ]
     })
     .compileComponents();
+  }))
 
+  beforeEach((async () => {
     fixture = TestBed.createComponent(HomePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
