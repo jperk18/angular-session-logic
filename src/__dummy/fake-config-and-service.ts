@@ -38,17 +38,14 @@ export class AuthServiceImp implements AuthenticationService {
   constructor(private httpClient: HttpClient) {
     
   }
-
-  client_id = this.authConfig.clientId
-  client_secret = this.authConfig.clientSecret
   
   readonly logInUrl = `${this.authConfig.issuer}/login`
   logIn(req: LoginRequest<AppUserCredentials>): Observable<LoginResponse<AppLoginResponse>> {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<LoginResponse<AppLoginResponse>>(`${this.logInUrl}`, { ...req, 
       grant_type: "login",
-      client_id: this.client_id,
-      client_secret: this.client_secret})
+      client_id: this.authConfig.clientId,
+      client_secret: this.authConfig.clientSecret})
   }
 
   readonly logOutUrl = `${this.authConfig.issuer}/logout`
@@ -62,8 +59,8 @@ export class AuthServiceImp implements AuthenticationService {
     //COULD DO EXTRA WORK AND MAPPING FOR THIS SERVICE ALL. REMEMBER TO NULL CHECK ON PROPERTY WITHIN THE REQUEST IF USING IT
     return this.httpClient.post<RefreshTokenResponse<string>>(`${this.refreshTokenUrl}`, {...req, 
       grant_type: 'refresh_token',
-      client_id: this.client_id,
-      client_secret: this.client_secret})
+      client_id: this.authConfig.clientId,
+      client_secret: this.authConfig.clientSecret})
   }
 
   isUrlToAppendTokenOn(url: string): Observable<boolean> {
